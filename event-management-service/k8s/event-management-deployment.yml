@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-management
+  template:
+    metadata:
+      labels:
+        app: event-management
+    spec:
+      containers:
+        - name: event-management
+          image: foxxxxx333/event-management:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres-event:5432/eventdb"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "eventuser"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "eventpass"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-management
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080
+  selector:
+    app: event-management

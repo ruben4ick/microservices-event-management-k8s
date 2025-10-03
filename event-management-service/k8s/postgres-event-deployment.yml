@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-event
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-event
+  template:
+    metadata:
+      labels:
+        app: postgres-event
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "eventuser"
+            - name: POSTGRES_PASSWORD
+              value: "eventpass"
+            - name: POSTGRES_DB
+              value: "eventdb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-event
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-event
