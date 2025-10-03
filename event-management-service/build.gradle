@@ -1,0 +1,84 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.springdoc.openapi-gradle-plugin" version "1.9.0"
+}
+
+group = 'ua.edu.ukma'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.modelmapper:modelmapper:3.2.1'
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0'
+//	implementation 'ua.edu.ukma:modelmapper-spring-boot-starter:0.0.1-SNAPSHOT'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.3.4'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6' // JWT dependency
+	implementation 'org.springframework.boot:spring-boot-starter-aop:3.3.5'
+	implementation 'org.springframework.boot:spring-boot-starter-cache:3.3.5'
+	implementation "org.springframework.modulith:spring-modulith-starter-core:1.2.4"
+    implementation "org.springframework.modulith:spring-modulith-starter-jpa:1.2.4"
+    implementation "org.springframework.modulith:spring-modulith-docs:1.2.0"
+
+
+    runtimeOnly 'com.h2database:h2:2.3.232'
+	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6' // JWT dependency
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6' // JWT dependency
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+	testCompileOnly 'org.projectlombok:lombok:1.18.34'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.4.0'
+	testImplementation 'org.springframework.security:spring-security-test:6.3.4'
+	testImplementation 'org.springframework.modulith:spring-modulith-starter-test:1.2.4'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+tasks.register('generateAPIFile') {
+	doLast {
+		def projectRoot = project.projectDir
+		def newFile = new File(projectRoot, "open-api.json")
+		if (!newFile.exists()) {
+			newFile.createNewFile()
+		}
+		exec {
+			commandLine 'curl', '-o', newFile.getAbsolutePath(), 'http://localhost:8080/v3/api-docs'
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	enabled = true
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += '-parameters'
+}
+
+bootJar {
+    archiveFileName = 'app.jar'
+}

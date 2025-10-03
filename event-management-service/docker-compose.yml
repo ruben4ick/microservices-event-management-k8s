@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17.2
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: eventdb
+      POSTGRES_USER: eventuser
+      POSTGRES_PASSWORD: eventpass
+
+  app:
+    image: foxxxxx333/event-management:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eventdb
+      SPRING_DATASOURCE_USERNAME: eventuser
+      SPRING_DATASOURCE_PASSWORD: eventpass
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - postgres
