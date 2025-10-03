@@ -1,4 +1,4 @@
-package ua.edu.ukma.event_management_system.user;
+package ua.edu.ukma.user_service.user;
 
 import org.jmolecules.event.types.DomainEvent;
 

@@ -10,6 +10,6 @@
 @ApplicationModule(
     displayName = "User Management"
 )
-package ua.edu.ukma.event_management_system.user;
+package ua.edu.ukma.user_service.user;
 
 import org.springframework.modulith.ApplicationModule;

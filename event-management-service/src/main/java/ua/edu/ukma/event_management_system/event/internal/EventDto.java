@@ -1,7 +1,6 @@
 package ua.edu.ukma.event_management_system.event.internal;
 
 import lombok.*;
-import ua.edu.ukma.event_management_system.user.internal.UserDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,8 +18,8 @@ public class EventDto {
     private int numberOfTickets;
     private int minAgeRestriction;
     private List<Long> rating;
-    private List<UserDto> users;
+    private List<Long> userIds;
     private byte[] image;
-    private long creator;
+    private Long creatorId;
     private double price;
 }
