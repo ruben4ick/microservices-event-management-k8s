@@ -24,7 +24,7 @@ public class EventManagement {
             (long) event.getId(), 
             event.getEventTitle(), 
             (long) event.getBuilding().getId(),
-            event.getCreator().getId(),
+            event.getCreatorId(),
             event.getDateTimeStart(),
             event.getNumberOfTickets()
         ));

@@ -1,9 +1,8 @@
-package ua.edu.ukma.event_management_system.user.internal;
+package ua.edu.ukma.user_service.user.internal;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ua.edu.ukma.event_management_system.user.internal.User;
 
 import java.util.ArrayList;
 import java.util.Collection;

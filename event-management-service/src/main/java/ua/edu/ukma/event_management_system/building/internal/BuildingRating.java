@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.event_management_system.user.internal.User;
 
 @Entity
 @Table(name = "building_ratings")
@@ -22,7 +21,6 @@ public class BuildingRating {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "building_id")
 	private Building building;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id")
-	private User author;
+	@Column(name = "author_id", nullable = false)
+	private Long authorId; 
 }

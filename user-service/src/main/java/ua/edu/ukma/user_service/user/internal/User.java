@@ -1,4 +1,4 @@
-package ua.edu.ukma.event_management_system.user.internal;
+package ua.edu.ukma.user_service.user.internal;
 
 import jakarta.persistence.*;
 import lombok.Data;

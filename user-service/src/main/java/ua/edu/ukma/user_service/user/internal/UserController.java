@@ -1,10 +1,10 @@
-package ua.edu.ukma.event_management_system.user.internal;
+package ua.edu.ukma.user_service.user.internal;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.edu.ukma.event_management_system.user.UserManagement;
+import ua.edu.ukma.user_service.user.UserManagement;
 
 import java.util.List;
 

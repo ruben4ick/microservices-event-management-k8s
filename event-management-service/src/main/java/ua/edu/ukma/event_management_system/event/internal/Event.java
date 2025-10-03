@@ -2,7 +2,6 @@ package ua.edu.ukma.event_management_system.event.internal;
 
 import lombok.Data;
 import ua.edu.ukma.event_management_system.building.internal.Building;
-import ua.edu.ukma.event_management_system.user.internal.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,8 +17,8 @@ public class Event {
     private int numberOfTickets;
     private int minAgeRestriction;
     private List<EventRating> rating;
-    private List<User> users;
+    private List<Long> userIds;
     private byte[] image;
-    private User creator;
+    private Long creatorId;
     private double price;
 }
