@@ -1,0 +1,60 @@
+services:
+  postgres-event:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: eventdb
+      POSTGRES_USER: eventuser
+      POSTGRES_PASSWORD: eventpass
+    ports: ["5432:5432"]
+    volumes: ["pg_event:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U eventuser -d eventdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  event-management:
+    build:
+      context: .
+      dockerfile: event-management-service/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-event:5432/eventdb
+      SPRING_DATASOURCE_USERNAME: eventuser
+      SPRING_DATASOURCE_PASSWORD: eventpass
+      SPRING_PROFILES_ACTIVE: docker
+    ports: ["8080:8080"]
+    depends_on:
+      postgres-event:
+        condition: service_healthy
+
+  postgres-user:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: eventdb-user
+      POSTGRES_USER: useruser
+      POSTGRES_PASSWORD: userpass
+    ports: ["5433:5432"]
+    volumes: ["pg_user:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U useruser -d eventdb-user"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/eventdb-user
+      SPRING_DATASOURCE_USERNAME: useruser
+      SPRING_DATASOURCE_PASSWORD: userpass
+      SPRING_PROFILES_ACTIVE: docker
+    ports: ["8081:8080"]
+    depends_on:
+      postgres-user:
+        condition: service_healthy
+
+volumes:
+  pg_event:
+  pg_user:

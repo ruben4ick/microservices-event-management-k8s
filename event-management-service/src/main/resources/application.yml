@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: event-management-service
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8080
+
+user:
+  service:
+    url: http://localhost:8081

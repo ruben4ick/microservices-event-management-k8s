@@ -1,18 +1,13 @@
-# 1. Build
-FROM gradle:8.10.1-jdk21 AS builder
-
-WORKDIR /app
-
-COPY gradlew gradlew.bat ./
-COPY gradle ./gradle
-COPY build.gradle settings.gradle ./
-
-RUN chmod +x ./gradlew
-RUN ./gradlew dependencies --no-daemon || return 0
-
+FROM gradle:8.10.1-jdk21 AS build
+WORKDIR /workspace
 COPY . .
-RUN ./gradlew bootJar --no-daemon
+RUN ./gradlew --no-daemon :event-management-service:bootJar
 
-# 2. Export
-FROM scratch AS export
-COPY --from=builder /app/build/libs/app.jar /
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+# якщо в Gradle задав: bootJar { archiveFileName = 'app.jar' }
+COPY --from=build /workspace/event-management-service/build/libs/app.jar /app/app.jar
+# або без фікса імені:
+# COPY --from=build /workspace/event-management-service/build/libs/*.jar /app/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app/app.jar"]
