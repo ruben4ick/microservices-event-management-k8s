@@ -1,6 +1,6 @@
 package ua.edu.ukma.event_management_system.client;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +10,8 @@ import java.util.List;
 
 @FeignClient(
         name = "user-service",
-        url = "${USER_SERVICE_BASE_URL:http://user-service:8080}"
+        url = "${USER_SERVICE_BASE_URL:http://user-service:8080}",
+        configuration = FeignConfig.class
 )
 public interface UserClient {
     @GetMapping("/api/users/{id}")
