@@ -25,6 +25,11 @@ spec:
               value: "useruser"
             - name: SPRING_DATASOURCE_PASSWORD
               value: "userpass"
+            - name: INTERNAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: internal-api-key
 ---
 apiVersion: v1
 kind: Service
