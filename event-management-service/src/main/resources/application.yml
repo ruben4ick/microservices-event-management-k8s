@@ -26,3 +26,7 @@ management:
     health:
       probes:
         enabled: true
+
+internal:
+  api:
+    key: ${INTERNAL_API_KEY}
