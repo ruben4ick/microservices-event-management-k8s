@@ -14,9 +14,10 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: foxxxxx333/event-management-user:latest
+          image: foxxxxx333/event-management-user:1.0
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:postgresql://postgres-user:5432/eventdb-user"
@@ -32,8 +33,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8081
-      targetPort: 8081
+    - port: 8080
+      targetPort: 8080
       nodePort: 30081
   selector:
     app: user-service

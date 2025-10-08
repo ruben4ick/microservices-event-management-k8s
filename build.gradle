@@ -1,0 +1,111 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3' apply false
+    id 'io.spring.dependency-management' version '1.1.6' apply false
+    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0' apply false
+}
+
+ext {
+    springCloudVersion = '2023.0.3'
+}
+
+allprojects {
+    group = 'ua.edu.ukma'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        // mavenLocal()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    // apply plugin: 'org.springdoc.openapi-gradle-plugin'
+
+    java {
+        toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+//        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.modelmapper:modelmapper:3.2.1'
+        implementation 'org.springframework.retry:spring-retry'
+
+        implementation "org.springframework.modulith:spring-modulith-starter-core:1.2.4"
+        implementation "org.springframework.modulith:spring-modulith-starter-jpa:1.2.4"
+        implementation "org.springframework.modulith:spring-modulith-docs:1.2.0"
+
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0'
+
+        // implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+        // runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+        // runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'org.postgresql:postgresql'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+        compileOnly 'org.projectlombok:lombok:1.18.34'
+        annotationProcessor 'org.projectlombok:lombok:1.18.34'
+        testCompileOnly 'org.projectlombok:lombok:1.18.34'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test' // без версії!
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+        enabled = true
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += '-parameters'
+    }
+
+    tasks.named('bootJar', org.springframework.boot.gradle.tasks.bundling.BootJar) {
+        archiveFileName = 'app.jar'
+    }
+}
+
+project(':event-management-service') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    }
+
+    apply plugin: 'org.springdoc.openapi-gradle-plugin'
+}
+
+project(':user-service') {
+    apply plugin: 'org.springdoc.openapi-gradle-plugin'
+}
+
+tasks.register('buildAll') {
+    dependsOn ':event-management-service:build', ':user-service:build'
+    description = 'Builds all microservices'
+}
+tasks.register('testAll') {
+    dependsOn ':event-management-service:test', ':user-service:test'
+    description = 'Runs tests for all microservices'
+}
+tasks.register('cleanAll') {
+    dependsOn ':event-management-service:clean', ':user-service:clean'
+    description = 'Cleans all microservices'
+}
+
+// ./gradlew :event-management-service:bootRun
+// ./gradlew :user-service:bootRun

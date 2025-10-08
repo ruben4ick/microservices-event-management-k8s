@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: event-management
-          image: foxxxxx333/event-management:latest
+          image: foxxxxx333/event-management:1.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
