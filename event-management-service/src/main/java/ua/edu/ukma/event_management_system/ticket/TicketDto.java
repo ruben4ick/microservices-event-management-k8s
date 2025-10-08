@@ -1,4 +1,4 @@
-package ua.edu.ukma.event_management_system.ticket.internal;
+package ua.edu.ukma.event_management_system.ticket;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

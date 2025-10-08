@@ -1,8 +1,8 @@
-package ua.edu.ukma.event_management_system.ticket.internal;
+package ua.edu.ukma.event_management_system.ticket;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.event_management_system.event.internal.Event;
+import ua.edu.ukma.event_management_system.event.Event;
 
 import java.time.LocalDateTime;
 

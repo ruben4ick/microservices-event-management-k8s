@@ -22,6 +22,7 @@ services:
       SPRING_DATASOURCE_USERNAME: eventuser
       SPRING_DATASOURCE_PASSWORD: eventpass
       SPRING_PROFILES_ACTIVE: docker
+      USER_SERVICE_BASE_URL: http://user-service:8080
     ports: ["8080:8080"]
     depends_on:
       postgres-event:

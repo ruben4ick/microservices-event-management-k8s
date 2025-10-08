@@ -1,4 +1,4 @@
-package ua.edu.ukma.user_service.user.internal;
+package ua.edu.ukma.user_service.user;
 
 import jakarta.persistence.*;
 import lombok.Data;

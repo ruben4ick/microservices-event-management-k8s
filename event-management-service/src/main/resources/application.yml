@@ -10,4 +10,10 @@ server:
 
 user:
   service:
-    url: http://localhost:8081
+    url: ${USER_SERVICE_BASE_URL:http://user-service:8080}
+
+logging:
+  level:
+    org.springframework.retry: DEBUG
+    org.springframework.cloud.openfeign: INFO
+
