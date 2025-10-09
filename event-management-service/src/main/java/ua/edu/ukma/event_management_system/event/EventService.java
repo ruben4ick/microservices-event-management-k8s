@@ -62,6 +62,7 @@ public class EventService {
             backoff = @Backoff(delay = 500, multiplier = 2)
     )
     void ensureUserExists(Long id) {
+        System.out.println("[Retry] Checking if user exists (id=" + id + ")");
         userClient.getById(id);
     }
 

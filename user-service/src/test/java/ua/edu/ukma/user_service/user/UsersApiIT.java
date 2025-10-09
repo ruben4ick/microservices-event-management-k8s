@@ -1,4 +1,4 @@
-package ua.edu.ukma.user_service.api;
+package ua.edu.ukma.user_service.user;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
