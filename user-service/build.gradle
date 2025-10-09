@@ -1,0 +1,11 @@
+tasks.withType(Test).configureEach {
+    def envFile = file("$projectDir/../.env")
+    if (envFile.exists()) {
+        envFile.readLines()
+                .findAll { it && !it.startsWith("#") && it.contains("=") }
+                .each {
+                    def (k, v) = it.split("=", 2)
+                    environment k.trim(), v.trim()
+                }
+    }
+}

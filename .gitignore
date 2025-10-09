@@ -4,10 +4,12 @@
 HELP.md
 .gradle
 build/
-jars/*
+event-management-service/jars/
+user-service/jars/
 logs/
 bin/
 out/
 *.iws
 *.iml
 *.ipr
+.env

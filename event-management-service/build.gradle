@@ -1,5 +1,8 @@
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'net.datafaker:datafaker:2.4.1'
 }
 
 tasks.register('generateAPIFile') {
@@ -13,4 +16,17 @@ tasks.register('generateAPIFile') {
 			commandLine 'curl', '-o', newFile.getAbsolutePath(), 'http://localhost:8081/v3/api-docs'
 		}
 	}
+}
+
+tasks.withType(Test).configureEach {
+    def envFile = file("$rootDir/.env")
+    if (!envFile.exists()) envFile = file("$projectDir/.env")
+    if (envFile.exists()) {
+        envFile.readLines()
+                .findAll { it && !it.startsWith("#") && it.contains("=") }
+                .each {
+                    def (k, v) = it.split("=", 2)
+                    environment k.trim(), v.trim()
+                }
+    }
 }
