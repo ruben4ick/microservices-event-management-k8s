@@ -2,3 +2,4 @@ rootProject.name = 'event-management-system-k8s'
 
 include 'event-management-service'
 include 'user-service'
+include 'admin-telemetry-service'
