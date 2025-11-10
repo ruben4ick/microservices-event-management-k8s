@@ -8,7 +8,7 @@ services:
     ports: ["5432:5432"]
     volumes: ["pg_event:/var/lib/postgresql/data"]
     healthcheck:
-      test: ["CMD-SHELL","pg_isready -U eventuser -d eventdb"]
+      test: ["CMD-SHELL", "pg_isready -U eventuser -d eventdb"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -26,9 +26,6 @@ services:
     ports: ["8080:8080"]
     env_file:
       - .env
-    depends_on:
-      postgres-event:
-        condition: service_healthy
 
   postgres-user:
     image: postgres:17
@@ -39,7 +36,7 @@ services:
     ports: ["5433:5432"]
     volumes: ["pg_user:/var/lib/postgresql/data"]
     healthcheck:
-      test: ["CMD-SHELL","pg_isready -U useruser -d eventdb-user"]
+      test: ["CMD-SHELL", "pg_isready -U useruser -d eventdb-user"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -56,9 +53,19 @@ services:
     ports: ["8081:8080"]
     env_file:
       - .env
-    depends_on:
-      postgres-user:
-        condition: service_healthy
+
+  admin-telemetry-service:
+    build:
+      context: .
+      dockerfile: admin-telemetry-service/Dockerfile
+    env_file:
+      - .env
+    ports: ["9090:9090"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9090/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
 
 volumes:
   pg_event:
