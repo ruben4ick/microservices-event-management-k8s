@@ -38,6 +38,21 @@ management:
       show-details: when_authorized
       probes:
         enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: http://otel-lgtm:4318/v1/metrics
+    tracing:
+      endpoint: http://otel-lgtm:4318/v1/traces
+    logging:
+      endpoint: http://otel-lgtm:4318/v1/logs
 
 internal:
   api:
