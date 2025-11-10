@@ -20,9 +20,9 @@ spec:
             - containerPort: 9090
           env:
             - name: ACTUATOR_USER
-              value: event-management-admin
+              value: admin
             - name: ACTUATOR_PASSWORD
-              value: change-me
+              value: admin
           readinessProbe:
             httpGet:
               path: /actuator/health

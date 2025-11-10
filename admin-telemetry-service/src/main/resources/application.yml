@@ -4,5 +4,5 @@ server:
 spring:
   security:
     user:
-      name: ${ACTUATOR_USER:event-management-admin}
-      password: ${ACTUATOR_PASSWORD:change-me}
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}

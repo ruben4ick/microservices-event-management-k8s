@@ -3,8 +3,8 @@ spring:
     name: event-management-service
   security:
     user:
-      name: ${ACTUATOR_USER:event-management-admin}
-      password: ${ACTUATOR_PASSWORD:change-me}
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}
       roles: ADMIN
   jpa:
     open-in-view: false
@@ -14,13 +14,13 @@ spring:
     admin:
       client:
         url: ${SBA_URL:http://admin-telemetry-service:9090}
-        username: ${SBA_USER:event-management-admin}
-        password: ${SBA_PASSWORD:change-me}
+        username: ${SBA_USER:admin}
+        password: ${SBA_PASSWORD:admin}
         instance:
           management-base-url: ${MANAGEMENT_BASE_URL:http://user-service:8081}
           metadata:
-            user.name: ${ACTUATOR_USER:event-management-admin}
-            user.password: ${ACTUATOR_PASSWORD:change-me}
+            user.name: ${ACTUATOR_USER:admin}
+            user.password: ${ACTUATOR_PASSWORD:admin}
 
 server:
   port: 8080
