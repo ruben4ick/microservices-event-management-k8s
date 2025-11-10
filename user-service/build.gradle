@@ -1,3 +1,7 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
+
 tasks.withType(Test).configureEach {
     def envFile = file("$projectDir/../.env")
     if (envFile.exists()) {
