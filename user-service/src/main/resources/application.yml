@@ -5,6 +5,7 @@ spring:
     user:
       name: ${ACTUATOR_USER:event-management-admin}
       password: ${ACTUATOR_PASSWORD:change-me}
+      roles: ADMIN
   jpa:
     open-in-view: false
     hibernate:
@@ -13,8 +14,8 @@ spring:
     admin:
       client:
         url: ${SBA_URL:http://admin-telemetry-service:9090}
-        username: ${SBA_USER:admin}
-        password: ${SBA_PASSWORD:admin}
+        username: ${SBA_USER:event-management-admin}
+        password: ${SBA_PASSWORD:change-me}
         instance:
           management-base-url: ${MANAGEMENT_BASE_URL:http://user-service:8081}
           metadata:
