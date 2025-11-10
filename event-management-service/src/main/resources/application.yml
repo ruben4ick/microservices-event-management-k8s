@@ -17,7 +17,7 @@ spring:
         username: ${SBA_USER:admin}
         password: ${SBA_PASSWORD:admin}
         instance:
-          management-base-url: ${MANAGEMENT_BASE_URL:http://user-service:8081}
+          management-base-url: ${MANAGEMENT_BASE_URL:http://event-management-service:8080}
           metadata:
             user.name: ${ACTUATOR_USER:admin}
             user.password: ${ACTUATOR_PASSWORD:admin}
