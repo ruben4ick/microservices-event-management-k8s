@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-telemetry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-telemetry
+  template:
+    metadata:
+      labels:
+        app: admin-telemetry
+    spec:
+      containers:
+        - name: admin-telemetry
+          image: foxxxxx333/admin-telemetry-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+          env:
+            - name: ACTUATOR_USER
+              value: event-management-admin
+            - name: ACTUATOR_PASSWORD
+              value: change-me
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-management
+spec:
+  type: NodePort
+  ports:
+    - port: 9090
+      targetPort: 9090
+      nodePort: 30090
+  selector:
+    app: admin-telemetry

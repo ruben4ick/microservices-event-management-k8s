@@ -3,12 +3,23 @@ spring:
     name: user-service
   security:
     user:
-      name: event-management-admin
-      password: change-me
+      name: ${ACTUATOR_USER:event-management-admin}
+      password: ${ACTUATOR_PASSWORD:change-me}
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: update
+  boot:
+    admin:
+      client:
+        url: ${SBA_URL:http://admin-telemetry-service:9090}
+        username: ${SBA_USER:admin}
+        password: ${SBA_PASSWORD:admin}
+        instance:
+          management-base-url: ${MANAGEMENT_BASE_URL:http://user-service:8081}
+          metadata:
+            user.name: ${ACTUATOR_USER:event-management-admin}
+            user.password: ${ACTUATOR_PASSWORD:change-me}
 
 server:
   port: 8080

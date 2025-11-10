@@ -1,0 +1,8 @@
+server:
+  port: 9090
+
+spring:
+  security:
+    user:
+      name: ${ACTUATOR_USER:event-management-admin}
+      password: ${ACTUATOR_PASSWORD:change-me}
