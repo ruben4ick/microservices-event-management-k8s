@@ -1,4 +1,10 @@
 services:
+  activemq:
+    image: apache/activemq-classic:6.1.7
+    ports:
+      - "61616:61616" # JMS port
+      - "8161:8161" # interface
+
   postgres-event:
     image: postgres:17
     environment:
@@ -23,12 +29,15 @@ services:
       SPRING_DATASOURCE_PASSWORD: eventpass
       SPRING_PROFILES_ACTIVE: docker
       USER_SERVICE_BASE_URL: http://user-service:8080
+      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
     ports: ["8080:8080"]
     env_file:
       - .env
     depends_on:
       postgres-event:
         condition: service_healthy
+      activemq:
+        condition: service_started
 
   postgres-user:
     image: postgres:17
@@ -53,13 +62,17 @@ services:
       SPRING_DATASOURCE_USERNAME: useruser
       SPRING_DATASOURCE_PASSWORD: userpass
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
     ports: ["8081:8080"]
     env_file:
       - .env
     depends_on:
       postgres-user:
         condition: service_healthy
+      activemq:
+        condition: service_started
 
 volumes:
   pg_event:
   pg_user:
+  activemq_data:
