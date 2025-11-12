@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.retry.annotation.EnableRetry;
 
 @SpringBootApplication
 @EnableFeignClients
 @EnableRetry
+@EnableDiscoveryClient
 public class EventManagementSystemApplication implements CommandLineRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(EventManagementSystemApplication.class);
