@@ -10,7 +10,6 @@ import java.util.List;
 
 @FeignClient(
         name = "user-service",
-        url = "${USER_SERVICE_BASE_URL:http://user-service:8080}",
         configuration = FeignConfig.class
 )
 public interface UserClient {
