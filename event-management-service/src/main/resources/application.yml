@@ -30,3 +30,9 @@ management:
 internal:
   api:
     key: ${INTERNAL_API_KEY}
+
+grpc:
+  client:
+    user-service:
+      address: "static://user-service:9090"
+      negotiationType: plaintext

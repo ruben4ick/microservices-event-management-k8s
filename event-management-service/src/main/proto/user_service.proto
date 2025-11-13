@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ua.edu.ukma.user_service.grpc";
+option java_outer_classname = "UserServiceProto";
+
+package users;
+
+service UserGrpcService {
+  rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
+}
+
+message GetUserByIdRequest {
+  int64 id = 1;
+}
+
+message UserResponse {
+  int64 id = 1;
+  string username = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email = 5;
+  string phone_number = 6;
+}
+
+message GetUserByIdResponse {
+  UserResponse user = 1;
+}
+
+message ListUsersRequest {
+}
+
+message ListUsersResponse {
+  repeated UserResponse users = 1;
+}

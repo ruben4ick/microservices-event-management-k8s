@@ -1,7 +1,8 @@
 package ua.edu.ukma.event_management_system.ticket;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,49 +12,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketController {
 
-    @GetMapping
-    public ResponseEntity<List<TicketDto>> getAllTickets() {
-        try {
-            return ResponseEntity.ok(List.of());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
 
-    @GetMapping("/{ticketId}")
-    public ResponseEntity<TicketDto> getTicketById(@PathVariable Long ticketId) {
-        try {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
+    private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketDto> purchaseTicket(@RequestBody TicketDto ticketDto) {
-        try {
-            return ResponseEntity.status(501).build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public TicketDto create(@Valid @RequestBody TicketDto dto) {
+        return ticketService.create(dto);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TicketDto>> getTicketsByUser(@PathVariable Long userId) {
-        try {
-            
-            return ResponseEntity.ok(List.of());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @GetMapping("/{id}")
+    public TicketDto get(@PathVariable Long id) {
+        return ticketService.getById(id);
     }
 
-    @DeleteMapping("/{ticketId}")
-    public ResponseEntity<Void> cancelTicket(@PathVariable Long ticketId) {
-        try {
-            return ResponseEntity.status(501).build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @GetMapping
+    public List<TicketDto> all() {
+        return ticketService.getAll();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        ticketService.delete(id);
     }
 }
