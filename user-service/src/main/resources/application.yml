@@ -21,3 +21,7 @@ internal:
 grpc:
   server:
     port: 9090
+    security:
+      enabled: true
+      certificateChain: classpath:certs/server.crt
+      privateKey: classpath:certs/server.key

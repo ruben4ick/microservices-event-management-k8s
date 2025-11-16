@@ -35,8 +35,11 @@ grpc:
   client:
     user-service:
       address: "static://user-service:9090"
-      negotiationType: plaintext
       enableKeepAlive: false
+      negotiationType: TLS
+      security:
+        trustCertCollection: classpath:certs/ca.crt
+
 
 netty:
   tcnative:

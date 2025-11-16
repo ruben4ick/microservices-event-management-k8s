@@ -1,9 +1,13 @@
 package ua.edu.ukma.event_management_system.grpc;
 
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ua.edu.ukma.event_management_system.client.UserDto;
 import ua.edu.ukma.user_service.grpc.*;
 
@@ -27,8 +31,25 @@ public class UserGrpcClient {
                 .setId(userId)
                 .build();
 
-        GetUserByIdResponse response = userStub.getUserById(request);
-        return response.getUser();
+        try {
+            GetUserByIdResponse response = userStub.getUserById(request);
+            return response.getUser();
+
+        } catch (StatusRuntimeException e) {
+            Status.Code code = e.getStatus().getCode();
+
+            if (code == Status.NOT_FOUND.getCode()) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User with id=" + userId + " not found"
+                );
+            }
+
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "gRPC error: " + e.getStatus()
+            );
+        }
     }
 
     public List<UserDto> listUsers() {

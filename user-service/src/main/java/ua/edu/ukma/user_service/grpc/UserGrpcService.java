@@ -41,15 +41,23 @@ public class UserGrpcService extends UserGrpcServiceGrpc.UserGrpcServiceImplBase
     @Override
     public void listUsers(ListUsersRequest request,
                           StreamObserver<UserResponse> responseObserver) {
+        try {
+            List<User> users = userRepository.findAll();
 
-        List<User> users = userRepository.findAll();
+            for (User user : users) {
+                UserResponse response = toUserResponse(user);
+                responseObserver.onNext(response);
+            }
 
-        for (User user : users) {
-            UserResponse response = toUserResponse(user);
-            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.INTERNAL
+                            .withDescription("Failed to list users")
+                            .withCause(e)
+                            .asRuntimeException()
+            );
         }
-
-        responseObserver.onCompleted();
     }
 
     private UserResponse toUserResponse(User user) {
