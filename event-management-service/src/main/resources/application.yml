@@ -36,3 +36,8 @@ grpc:
     user-service:
       address: "static://user-service:9090"
       negotiationType: plaintext
+      enableKeepAlive: false
+
+netty:
+  tcnative:
+    disable: true

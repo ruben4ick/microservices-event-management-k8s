@@ -12,7 +12,7 @@ import ua.edu.ukma.user_service.grpc.UserResponse;
 @RequiredArgsConstructor
 public class UserGrpcClient {
 
-    @GrpcClient("userService")
+    @GrpcClient("user-service")
     private UserGrpcServiceGrpc.UserGrpcServiceBlockingStub userStub;
 
     public UserResponse getUserById(long userId) {
