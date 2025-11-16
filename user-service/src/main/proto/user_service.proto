@@ -8,7 +8,7 @@ package users;
 
 service UserGrpcService {
   rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
-  rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
+  rpc ListUsers (ListUsersRequest) returns (stream UserResponse);
 }
 
 message GetUserByIdRequest {
@@ -29,8 +29,4 @@ message GetUserByIdResponse {
 }
 
 message ListUsersRequest {
-}
-
-message ListUsersResponse {
-  repeated UserResponse users = 1;
 }

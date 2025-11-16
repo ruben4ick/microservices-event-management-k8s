@@ -40,15 +40,15 @@ public class UserGrpcService extends UserGrpcServiceGrpc.UserGrpcServiceImplBase
 
     @Override
     public void listUsers(ListUsersRequest request,
-                          StreamObserver<ListUsersResponse> responseObserver) {
+                          StreamObserver<UserResponse> responseObserver) {
+
         List<User> users = userRepository.findAll();
 
-        ListUsersResponse.Builder builder = ListUsersResponse.newBuilder();
         for (User user : users) {
-            builder.addUsers(toUserResponse(user));
+            UserResponse response = toUserResponse(user);
+            responseObserver.onNext(response);
         }
 
-        responseObserver.onNext(builder.build());
         responseObserver.onCompleted();
     }
 
