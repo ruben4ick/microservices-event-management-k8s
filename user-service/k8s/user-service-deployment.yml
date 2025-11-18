@@ -30,6 +30,18 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: internal-api-key
+          readinessProbe:
+            httpGet:
+              path: /manage/health/readiness
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /manage/health/liveness
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
