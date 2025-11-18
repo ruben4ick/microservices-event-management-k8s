@@ -38,6 +38,8 @@ services:
         condition: service_healthy
       activemq:
         condition: service_started
+    volumes:
+      - ./logs/event:/app/logs
 
   postgres-user:
     image: postgres:17
@@ -71,6 +73,8 @@ services:
         condition: service_healthy
       activemq:
         condition: service_started
+    volumes:
+      - ./logs/user:/app/logs
 
   admin-telemetry-service:
     build:

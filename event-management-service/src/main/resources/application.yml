@@ -47,6 +47,16 @@ management:
       show-details: when_authorized
       probes:
         enabled: true
+    logfile:
+      enabled: true
+      external-file: /app/logs/event-management-service.log
+    loggers:
+      enabled: true
+    env:
+      show-values: when_authorized
+  logging:
+    file:
+      name: /app/logs/event-management-service.log
   metrics:
     tags:
       application: ${spring.application.name}
