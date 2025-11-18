@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: event-management
+  name: admin-telemetry-service
 spec:
   type: NodePort
   ports:

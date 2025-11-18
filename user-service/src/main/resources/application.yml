@@ -25,6 +25,14 @@ spring:
 server:
   port: 8080
 
+logging:
+  level:
+    org.springframework.retry: DEBUG
+    org.springframework.cloud.openfeign: INFO
+    root: INFO
+  file:
+    name: /app/logs/user-service.log
+
 management:
   server:
     port: 8081
@@ -38,6 +46,42 @@ management:
       show-details: when_authorized
       probes:
         enabled: true
+    logfile:
+      enabled: true
+      external-file: /app/logs/user-service.log
+    loggers:
+      enabled: true
+    env:
+      show-values: when_authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
+      jdbc: true
+      logback: true
+      application: true
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://otel-lgtm:4318/v1/metrics
+    tracing:
+      endpoint: http://otel-lgtm:4318/v1/traces
+    logging:
+      export:
+        enabled: true
+      endpoint: http://otel-lgtm:4318/v1/logs
 
 internal:
   api:
