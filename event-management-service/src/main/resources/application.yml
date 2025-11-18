@@ -10,17 +10,6 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
-  boot:
-    admin:
-      client:
-        url: ${SBA_URL:http://admin-telemetry-service:9090}
-        username: ${SBA_USER:admin}
-        password: ${SBA_PASSWORD:admin}
-        instance:
-          management-base-url: ${MANAGEMENT_BASE_URL:http://event-management:8081}
-          metadata:
-            user.name: ${ACTUATOR_USER:admin}
-            user.password: ${ACTUATOR_PASSWORD:admin}
 
 server:
   port: 8080
@@ -95,3 +84,12 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /manage/health
+    status-page-url-path: /manage/info
+    metadata-map:
+      "management.port": "8081"
+      "management.context-path": "/manage"
+      "user.name": "${ACTUATOR_USER:admin}"
+      "user.password": "${ACTUATOR_PASSWORD:admin}"

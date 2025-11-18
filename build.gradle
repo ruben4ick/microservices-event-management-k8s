@@ -33,24 +33,14 @@ subprojects {
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.modelmapper:modelmapper:3.2.1'
         implementation 'org.springframework.retry:spring-retry'
 
-        implementation "org.springframework.modulith:spring-modulith-starter-core:1.2.4"
-        implementation "org.springframework.modulith:spring-modulith-starter-jpa:1.2.4"
-        implementation "org.springframework.modulith:spring-modulith-docs:1.2.0"
-
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0'
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
-        implementation 'org.springframework.boot:spring-boot-starter-activemq'
 
         // implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
         // runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
@@ -94,9 +84,23 @@ subprojects {
     }
 }
 
+configure(subprojects.findAll { it.name in ['user-service', 'event-management-service'] }) {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation "org.springframework.modulith:spring-modulith-starter-core:1.2.4"
+        implementation "org.springframework.modulith:spring-modulith-starter-jpa:1.2.4"
+        implementation "org.springframework.modulith:spring-modulith-docs:1.2.0"
+        implementation 'org.springframework.boot:spring-boot-starter-activemq'
+    }
+}
+
 project(':eureka-server') {
     dependencies {
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 
     apply plugin: 'org.springdoc.openapi-gradle-plugin'
@@ -114,6 +118,14 @@ project(':event-management-service') {
     }
 
     apply plugin: 'org.springdoc.openapi-gradle-plugin'
+}
+
+project(':admin-telemetry-service') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'de.codecentric:spring-boot-admin-starter-server:3.2.3'
+    }
 }
 
 project(':user-service') {
