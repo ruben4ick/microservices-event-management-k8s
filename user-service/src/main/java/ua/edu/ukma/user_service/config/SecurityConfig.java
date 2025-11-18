@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/manage/prometheus").permitAll()
                         .requestMatchers("/manage/health/**", "/manage/info").permitAll()
                         .requestMatchers("/manage/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

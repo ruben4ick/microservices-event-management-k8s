@@ -33,6 +33,9 @@ logging:
   level:
     org.springframework.retry: DEBUG
     org.springframework.cloud.openfeign: INFO
+    root: INFO
+  file:
+    name: /app/logs/event-management-service.log
 
 management:
   server:
@@ -54,12 +57,20 @@ management:
       enabled: true
     env:
       show-values: when_authorized
-  logging:
-    file:
-      name: /app/logs/event-management-service.log
   metrics:
+    export:
+      prometheus:
+        enabled: true
     tags:
       application: ${spring.application.name}
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
+      jdbc: true
+      logback: true
+      application: true
   tracing:
     enabled: true
     sampling:
@@ -67,10 +78,13 @@ management:
   otlp:
     metrics:
       export:
+        enabled: true
         url: http://otel-lgtm:4318/v1/metrics
     tracing:
       endpoint: http://otel-lgtm:4318/v1/traces
     logging:
+      export:
+        enabled: true
       endpoint: http://otel-lgtm:4318/v1/logs
 
 internal:
