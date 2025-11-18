@@ -1,18 +1,43 @@
 spring:
   application:
     name: user-service
+  security:
+    user:
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}
+      roles: ADMIN
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: update
+  boot:
+    admin:
+      client:
+        url: ${SBA_URL:http://admin-telemetry-service:9090}
+        username: ${SBA_USER:admin}
+        password: ${SBA_PASSWORD:admin}
+        instance:
+          management-base-url: ${MANAGEMENT_BASE_URL:http://user-service:8081}
+          metadata:
+            user.name: ${ACTUATOR_USER:admin}
+            user.password: ${ACTUATOR_PASSWORD:admin}
+
 server:
   port: 8080
 
 management:
+  server:
+    port: 8081
   endpoints:
-    web.exposure.include: "health,info,metrics"
+    web:
+      base-path: /manage
+      exposure:
+        include: "*"
   endpoint:
-    health.probes.enabled: true
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
 
 internal:
   api:

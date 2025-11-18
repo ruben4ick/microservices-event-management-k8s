@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -30,11 +34,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/manage/health/**", "/manage/info").permitAll()
+                        .requestMatchers("/manage/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(apiKeyFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -49,8 +54,12 @@ public class SecurityConfig {
         ApiKeyFilter(String expectedKey) { this.expectedKey = expectedKey; }
 
         @Override
-        protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+        protected void doFilterInternal(@NonNull HttpServletRequest req, @NonNull HttpServletResponse res, @NonNull FilterChain chain)
                 throws ServletException, IOException {
+            if (req.getRequestURI().startsWith("/manage")) {
+                chain.doFilter(req, res);
+                return;
+            }
 
             String key = req.getHeader("x-api-key");
             if (key == null || !key.equals(expectedKey)) {
@@ -64,7 +73,6 @@ public class SecurityConfig {
                     List.of(new SimpleGrantedAuthority("INTERNAL"))
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
-
             chain.doFilter(req, res);
         }
     }
