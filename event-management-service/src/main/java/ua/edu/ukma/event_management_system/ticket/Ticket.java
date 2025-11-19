@@ -1,17 +1,24 @@
 package ua.edu.ukma.event_management_system.ticket;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import ua.edu.ukma.event_management_system.event.Event;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "tickets")
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@Builder
 public class Ticket {
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long userId;
-    private Event event;
-    private double price;
-    private LocalDateTime purchaseDate;
+    private Long eventId;
+    private String username;
 }

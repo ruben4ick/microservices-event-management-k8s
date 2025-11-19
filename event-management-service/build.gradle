@@ -10,6 +10,10 @@ dependencies {
     runtimeOnly("io.opentelemetry:opentelemetry-exporter-otlp")
 }
 
+tasks.named('processResources') {
+    exclude '**/*.proto'
+}
+
 tasks.register('generateAPIFile') {
 	doLast {
 		def projectRoot = project.projectDir

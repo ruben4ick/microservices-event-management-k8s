@@ -10,9 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketDto {
-    private long id;
+    private Long id;
     private Long userId;
-    private long event;
-    private double price;
-    private LocalDateTime purchaseDate;
+    private Long eventId;
+    private String username;
 }

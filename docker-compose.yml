@@ -45,7 +45,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-event:5432/eventdb
       SPRING_DATASOURCE_USERNAME: eventuser
       SPRING_DATASOURCE_PASSWORD: eventpass
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: default
+      USER_SERVICE_BASE_URL: http://user-service:8080
       EUREKA_URL: http://eureka-server:8761/eureka/
       SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
       MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
@@ -86,13 +87,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/eventdb-user
       SPRING_DATASOURCE_USERNAME: useruser
       SPRING_DATASOURCE_PASSWORD: userpass
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: default
       EUREKA_URL: http://eureka-server:8761/eureka/
       SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
       MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
       MANAGEMENT_OTLP_LOGGING_ENDPOINT: http://otel-lgtm:4318/v1/logs
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
-    ports: ["8081:8080", "8084:8081"]
+    ports:
+      - "8081:8080"   # REST
+      - "9091:9091"   # gRPC
+      - "8084:8081"   # gRPC
     env_file:
       - .env
     depends_on:

@@ -75,6 +75,15 @@ management:
 internal:
   api:
     key: ${INTERNAL_API_KEY}
+
+grpc:
+  server:
+    port: 9091
+    security:
+      enabled: true
+      certificateChain: classpath:certs/server.crt
+      privateKey: classpath:certs/server.key
+      
 eureka:
   client:
     service-url:

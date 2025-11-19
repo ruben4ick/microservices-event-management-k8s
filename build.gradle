@@ -5,6 +5,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.3' apply false
     id 'io.spring.dependency-management' version '1.1.6' apply false
     id 'org.springdoc.openapi-gradle-plugin' version '1.9.0' apply false
+    id 'com.google.protobuf' version '0.9.4' apply false
 }
 
 ext {
@@ -40,6 +41,7 @@ subprojects {
 
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+        implementation 'javax.annotation:javax.annotation-api:1.3.2'
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
         // implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
@@ -55,7 +57,7 @@ subprojects {
         testCompileOnly 'org.projectlombok:lombok:1.18.34'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
-        testImplementation 'org.springframework.boot:spring-boot-starter-test' // без версії!
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.security:spring-security-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'io.rest-assured:rest-assured:5.4.0'
@@ -113,11 +115,43 @@ project(':gateway-service') {
 }
 
 project(':event-management-service') {
+    apply plugin: 'org.springdoc.openapi-gradle-plugin'
+    apply plugin: 'com.google.protobuf'
+
     dependencies {
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+        implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
+
+        testImplementation 'io.rest-assured:rest-assured:5.4.0'
+        testImplementation 'net.datafaker:datafaker:2.4.1'
     }
 
-    apply plugin: 'org.springdoc.openapi-gradle-plugin'
+    protobuf {
+        protoc {
+            artifact = 'com.google.protobuf:protoc:3.25.3'
+        }
+        plugins {
+            grpc {
+                artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+            }
+        }
+        generateProtoTasks {
+            all().each { task ->
+                task.plugins {
+                    grpc {}
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            proto {
+                srcDir 'src/main/proto'
+            }
+        }
+    }
 }
 
 project(':admin-telemetry-service') {
@@ -130,6 +164,29 @@ project(':admin-telemetry-service') {
 
 project(':user-service') {
     apply plugin: 'org.springdoc.openapi-gradle-plugin'
+    apply plugin: 'com.google.protobuf'
+
+    dependencies {
+        implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+    }
+
+    protobuf {
+        protoc {
+            artifact = 'com.google.protobuf:protoc:3.25.3'
+        }
+        plugins {
+            grpc {
+                artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+            }
+        }
+        generateProtoTasks {
+            all().each { task ->
+                task.plugins {
+                    grpc {}
+                }
+            }
+        }
+    }
 }
 
 tasks.register('buildAll') {
