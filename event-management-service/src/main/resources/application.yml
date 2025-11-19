@@ -34,7 +34,7 @@ internal:
 grpc:
   client:
     user-service:
-      address: "static://user-service:9090"
+      address: "static://user-service:9091"
       enableKeepAlive: false
       negotiationType: TLS
       security:
