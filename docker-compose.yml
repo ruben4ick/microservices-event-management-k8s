@@ -88,7 +88,6 @@ services:
       SPRING_DATASOURCE_USERNAME: useruser
       SPRING_DATASOURCE_PASSWORD: userpass
       SPRING_PROFILES_ACTIVE: default
-      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
       EUREKA_URL: http://eureka-server:8761/eureka/
       SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
       MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
