@@ -1,18 +1,76 @@
 spring:
   application:
     name: user-service
+  security:
+    user:
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}
+      roles: ADMIN
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: update
+
 server:
   port: 8080
 
+logging:
+  level:
+    org.springframework.retry: DEBUG
+    org.springframework.cloud.openfeign: INFO
+    root: INFO
+  file:
+    name: /app/logs/user-service.log
+
 management:
+  server:
+    port: 8081
   endpoints:
-    web.exposure.include: "health,info,metrics"
+    web:
+      base-path: /manage
+      exposure:
+        include: "*"
   endpoint:
-    health.probes.enabled: true
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+    logfile:
+      enabled: true
+      external-file: /app/logs/user-service.log
+    loggers:
+      enabled: true
+    env:
+      show-values: when_authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
+      jdbc: true
+      logback: true
+      application: true
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        enabled: true
+        url: http://otel-lgtm:4318/v1/metrics
+    tracing:
+      endpoint: http://otel-lgtm:4318/v1/traces
+    logging:
+      export:
+        enabled: true
+      endpoint: http://otel-lgtm:4318/v1/logs
 
 internal:
   api:
@@ -25,3 +83,17 @@ grpc:
       enabled: true
       certificateChain: classpath:certs/server.crt
       privateKey: classpath:certs/server.key
+      
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /manage/health
+    status-page-url-path: /manage/info
+    metadata-map:
+      "management.port": "8081"
+      "management.context-path": "/manage"
+      "user.name": "${ACTUATOR_USER:admin}"
+      "user.password": "${ACTUATOR_PASSWORD:admin}"

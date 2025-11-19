@@ -1,8 +1,13 @@
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation("io.micrometer:micrometer-registry-otlp")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation 'io.micrometer:micrometer-registry-prometheus'
     testImplementation 'io.rest-assured:rest-assured:5.4.0'
     testImplementation 'net.datafaker:datafaker:2.4.1'
+    runtimeOnly("io.opentelemetry:opentelemetry-exporter-otlp")
 }
 
 tasks.named('processResources') {

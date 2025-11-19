@@ -1,0 +1,22 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: admin-telemetry-service
+  security:
+    user:
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      "user.name": "${ACTUATOR_USER:admin}"
+      "user.password": "${ACTUATOR_PASSWORD:admin}"
