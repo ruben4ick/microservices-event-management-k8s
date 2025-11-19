@@ -51,7 +51,7 @@ services:
       MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
       MANAGEMENT_OTLP_LOGGING_ENDPOINT: http://otel-lgtm:4318/v1/logs
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
-    ports: ["8082:8080"]
+    ports: ["8082:8080", "8083:8081"]
     env_file:
       - .env
     depends_on:
@@ -92,7 +92,7 @@ services:
       MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
       MANAGEMENT_OTLP_LOGGING_ENDPOINT: http://otel-lgtm:4318/v1/logs
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
-    ports: ["8081:8080"]
+    ports: ["8081:8080", "8084:8081"]
     env_file:
       - .env
     depends_on:
