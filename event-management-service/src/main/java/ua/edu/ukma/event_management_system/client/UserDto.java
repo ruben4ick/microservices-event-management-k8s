@@ -2,6 +2,8 @@ package ua.edu.ukma.event_management_system.client;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class UserDto {
     private Long id;
@@ -9,4 +11,8 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+    private String phoneNumber;
+    private String userRole;
+    private LocalDate dateOfBirth;
 }

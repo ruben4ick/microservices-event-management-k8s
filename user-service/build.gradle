@@ -1,9 +1,19 @@
+plugins {
+    id 'org.springframework.cloud.contract' version '4.3.0'
+    id 'maven-publish'
+}
+
+contracts {
+    baseClassForTests = 'ua.edu.ukma.user_service.contracts.BaseContractTest'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation("io.micrometer:micrometer-registry-otlp")
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation 'io.micrometer:micrometer-registry-prometheus'
     runtimeOnly("io.opentelemetry:opentelemetry-exporter-otlp")
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
 tasks.withType(Test).configureEach {
@@ -15,5 +25,19 @@ tasks.withType(Test).configureEach {
                     def (k, v) = it.split("=", 2)
                     environment k.trim(), v.trim()
                 }
+    }
+}
+
+tasks.named('contractTest') {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact verifierStubsJar
+        }
     }
 }

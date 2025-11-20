@@ -43,9 +43,6 @@ management:
     env:
       show-values: when_authorized
   metrics:
-    export:
-      prometheus:
-        enabled: true
     tags:
       application: ${spring.application.name}
     enable:
@@ -71,6 +68,10 @@ management:
       export:
         enabled: true
       endpoint: http://otel-lgtm:4318/v1/logs
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 internal:
   api:
