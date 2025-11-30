@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import ua.edu.ukma.event_management_system.client.UserClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;

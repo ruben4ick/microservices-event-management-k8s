@@ -37,9 +37,4 @@ public class Building {
         this.description = description;
         this.ratings = new ArrayList<>();
     }
-
-    public Building(Long id, String address, int hourlyRate, int areaM2, int capacity, String description, List<BuildingRating> rating) {
-        this(id, address, hourlyRate, areaM2, capacity, description);
-        this.ratings = ratings;
-    }
 }

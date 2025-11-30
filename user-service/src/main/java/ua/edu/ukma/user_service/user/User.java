@@ -1,16 +1,19 @@
 package ua.edu.ukma.user_service.user;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,21 +34,4 @@ public class User {
     private String password;
     @Column
     private LocalDate dateOfBirth;
-
-    public long getAge() {
-        LocalDate now = LocalDate.now();
-        return ChronoUnit.YEARS.between(dateOfBirth, now);
-    }
-
-    public User(long id, UserRole userRole, String username, String firstName, String lastName, String email, String phoneNumber, String password, LocalDate dateOfBirth) {
-        this.id = id;
-        this.userRole = userRole;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.dateOfBirth = dateOfBirth;
-    }
 }

@@ -29,13 +29,11 @@ public class UserGrpcService extends UserGrpcServiceGrpc.UserGrpcServiceImplBase
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        }, () -> {
-            responseObserver.onError(
-                    Status.NOT_FOUND
-                            .withDescription("User with id=%d not found".formatted(id))
-                            .asRuntimeException()
-            );
-        });
+        }, () -> responseObserver.onError(
+                Status.NOT_FOUND
+                        .withDescription("User with id=%d not found".formatted(id))
+                        .asRuntimeException()
+        ));
     }
 
     @Override

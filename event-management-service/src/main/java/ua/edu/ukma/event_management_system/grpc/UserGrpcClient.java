@@ -80,7 +80,12 @@ public class UserGrpcClient {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Thread interrupted while waiting for gRPC response",
+                    e
+            );
         }
 
         return result;

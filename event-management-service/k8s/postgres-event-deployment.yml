@@ -12,11 +12,13 @@ spec:
       labels:
         app: postgres-event
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: postgres
           image: postgres:17
           ports:
             - containerPort: 5432
+
           env:
             - name: POSTGRES_USER
               value: "eventuser"
@@ -24,6 +26,14 @@ spec:
               value: "eventpass"
             - name: POSTGRES_DB
               value: "eventdb"
+
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service

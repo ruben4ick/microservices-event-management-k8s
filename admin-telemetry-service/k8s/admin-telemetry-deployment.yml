@@ -12,10 +12,20 @@ spec:
       labels:
         app: admin-telemetry
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: admin-telemetry
-          image: foxxxxx333/admin-telemetry-service:latest
+          image: foxxxxx333/admin-telemetry-service:1.0.0
           imagePullPolicy: IfNotPresent
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
           ports:
             - containerPort: 9090
           env:
@@ -23,6 +33,7 @@ spec:
               value: admin
             - name: ACTUATOR_PASSWORD
               value: admin
+
           readinessProbe:
             httpGet:
               path: /actuator/health

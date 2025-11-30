@@ -12,12 +12,14 @@ spec:
       labels:
         app: event-management
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: event-management
-          image: foxxxxx333/event-management:latest
+          image: foxxxxx333/event-management:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:postgresql://postgres-event:5432/eventdb"
@@ -30,12 +32,22 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: internal-api-key
+
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
           readinessProbe:
             httpGet:
               path: /manage/health/readiness
               port: 8081
             initialDelaySeconds: 10
             periodSeconds: 10
+
           livenessProbe:
             httpGet:
               path: /manage/health/liveness

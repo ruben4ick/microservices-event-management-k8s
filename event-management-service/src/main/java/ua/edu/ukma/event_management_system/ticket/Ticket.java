@@ -2,9 +2,6 @@ package ua.edu.ukma.event_management_system.ticket;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ua.edu.ukma.event_management_system.event.Event;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tickets")

@@ -12,11 +12,22 @@ spec:
       labels:
         app: postgres-user
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: postgres
           image: postgres:17
+
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+
           ports:
             - containerPort: 5432
+
           env:
             - name: POSTGRES_USER
               value: "useruser"

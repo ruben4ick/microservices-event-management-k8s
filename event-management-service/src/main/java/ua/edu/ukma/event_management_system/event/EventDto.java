@@ -1,7 +1,6 @@
 package ua.edu.ukma.event_management_system.event;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;

@@ -3,7 +3,6 @@ package ua.edu.ukma.event_management_system.event;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.edu.ukma.event_management_system.building.internal.Building;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
