@@ -1,11 +1,15 @@
 spring:
   application:
-    name: user-service
+    name: auth-service
   security:
     user:
       name: ${ACTUATOR_USER:admin}
       password: ${ACTUATOR_PASSWORD:admin}
       roles: ADMIN
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${SPRING_DATASOURCE_USERNAME:authuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:authpass}
   jpa:
     open-in-view: false
     hibernate:
@@ -14,13 +18,15 @@ spring:
 server:
   port: 8080
 
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatShouldBeAtLeast256BitsLong}
+  expiration: ${JWT_EXPIRATION:86400000}
+
 logging:
   level:
-    org.springframework.retry: DEBUG
-    org.springframework.cloud.openfeign: INFO
     root: INFO
   file:
-    name: /app/logs/user-service.log
+    name: /app/logs/auth-service.log
 
 management:
   server:
@@ -37,7 +43,7 @@ management:
         enabled: true
     logfile:
       enabled: true
-      external-file: /app/logs/user-service.log
+      external-file: /app/logs/auth-service.log
     loggers:
       enabled: true
     env:
@@ -72,24 +78,9 @@ management:
         enabled: true
       endpoint: http://otel-lgtm:4318/v1/logs
 
-internal:
-  api:
-    key: ${INTERNAL_API_KEY}
-
-jwt:
-  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatShouldBeAtLeast256BitsLong}
-
-grpc:
-  server:
-    port: 9091
-    security:
-      enabled: true
-      certificateChain: classpath:certs/server.crt
-      privateKey: classpath:certs/server.key
-      
 eureka:
   client:
-    service-url:
+    serviceUrl:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
@@ -100,3 +91,4 @@ eureka:
       "management.context-path": "/manage"
       "user.name": "${ACTUATOR_USER:admin}"
       "user.password": "${ACTUATOR_PASSWORD:admin}"
+

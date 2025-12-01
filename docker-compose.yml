@@ -79,6 +79,20 @@ services:
       timeout: 3s
       retries: 20
 
+  postgres-auth:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: authuser
+      POSTGRES_PASSWORD: authpass
+    ports: ["5434:5432"]
+    volumes: ["pg_auth:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U authuser -d authdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   user-service:
     build:
       context: .
@@ -107,6 +121,32 @@ services:
       activemq:
         condition: service_healthy
 
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/authdb
+      SPRING_DATASOURCE_USERNAME: authuser
+      SPRING_DATASOURCE_PASSWORD: authpass
+      SPRING_PROFILES_ACTIVE: default
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
+      MANAGEMENT_OTLP_LOGGING_ENDPOINT: http://otel-lgtm:4318/v1/logs
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
+    ports:
+      - "8085:8080"   # REST
+      - "8086:8081"   # Management
+    env_file:
+      - .env
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    volumes:
+      - ./logs/auth:/app/logs
+
   gateway-service:
     build:
       context: .
@@ -124,6 +164,8 @@ services:
       event-management:
         condition: service_started
       user-service:
+        condition: service_started
+      auth-service:
         condition: service_started
     volumes:
       - ./logs/user:/app/logs
@@ -157,6 +199,7 @@ services:
     depends_on:
       - event-management
       - user-service
+      - auth-service
 
   otel-lgtm:
     image: grafana/otel-lgtm:latest
@@ -173,4 +216,5 @@ services:
 volumes:
   pg_event:
   pg_user:
+  pg_auth:
   activemq_data:
