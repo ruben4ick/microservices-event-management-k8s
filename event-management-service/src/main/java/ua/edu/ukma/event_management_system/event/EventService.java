@@ -36,7 +36,6 @@ public class EventService {
 		try {
 			jmsTemplate.setPubSubDomain(true);
 			jmsTemplate.convertAndSend("event.created.topic", savedDto, message -> {
-						// using that for filtering
 						message.setDoubleProperty("eventPrice", saved.getPrice());
 						message.setStringProperty("eventType", "NEW");
 						log.info("Publishing JMS message to event.created.topic - new event");
@@ -83,12 +82,19 @@ public class EventService {
 	)
 	void ensureUserExists(Long id) {
         log.info("[Retry] Checking if user exists (id={})", id);
-		userClient.getById(id);
+		try {
+			userClient.getById(id);
+		} catch (FeignException.NotFound e) {
+			throw new IllegalArgumentException("User not found: " + id, e);
+		}
 	}
 
 
 	@Recover
-	void userServiceUnavailable(FeignException ex) {
+	void userServiceUnavailable(FeignException ex, Long id) {
+		if (ex.status() == 404) {
+			throw new IllegalArgumentException("User not found: " + id, ex);
+		}
 		throw new IllegalStateException("User-service unavailable", ex);
 	}
 }

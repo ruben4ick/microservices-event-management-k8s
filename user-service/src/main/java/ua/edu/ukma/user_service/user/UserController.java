@@ -47,7 +47,6 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<User> authenticateUser(@RequestParam String username, @RequestParam String password) {
-        // TODO: Implement authenticateUser in UserManagement
         return ResponseEntity.notFound().build();
     }
 }
