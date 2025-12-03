@@ -76,6 +76,9 @@ internal:
   api:
     key: ${INTERNAL_API_KEY}
 
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatShouldBeAtLeast256BitsLong}
+
 grpc:
   server:
     port: 9091
