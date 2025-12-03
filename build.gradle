@@ -86,7 +86,7 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll { it.name in ['user-service', 'event-management-service', 'auth-service'] }) {
+configure(subprojects.findAll { it.name in ['user-service', 'event-management-service'] }) {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'

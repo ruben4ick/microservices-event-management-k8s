@@ -21,6 +21,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/manage/health/**", "/manage/info").permitAll()
+                        .requestMatchers("/manage/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

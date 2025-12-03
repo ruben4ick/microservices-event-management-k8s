@@ -1,6 +1,11 @@
 spring:
   application:
     name: auth-service
+  security:
+    user:
+      name: ${ACTUATOR_USER:admin}
+      password: ${ACTUATOR_PASSWORD:admin}
+      roles: ADMIN
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
     username: ${SPRING_DATASOURCE_USERNAME:authuser}
@@ -13,14 +18,36 @@ spring:
 server:
   port: 8080
 
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+    env:
+      show-values: when_authorized
+
 jwt:
   secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationThatShouldBeAtLeast256BitsLong}
   expiration: ${JWT_EXPIRATION:86400000}
 
 eureka:
   client:
-    serviceUrl:
+    service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
-
+    health-check-url-path: /manage/health
+    status-page-url-path: /manage/info
+    metadata-map:
+      "management.port": "8081"
+      "management.context-path": "/manage"
+      "user.name": "${ACTUATOR_USER:admin}"
+      "user.password": "${ACTUATOR_PASSWORD:admin}"
