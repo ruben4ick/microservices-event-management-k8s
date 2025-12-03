@@ -22,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {
-        "internal.api.key=test-secret"
+        "internal.api.key=test-secret",
+        "grpc.server.port=-1"
 })
 class SecurityTest {
 
