@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/manage/prometheus").permitAll()
                         .requestMatchers("/manage/health/**", "/manage/info").permitAll()
                         .requestMatchers("/manage/**").hasRole("ADMIN")
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().authenticated()
                 )
