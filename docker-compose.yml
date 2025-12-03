@@ -131,12 +131,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: authpass
       SPRING_PROFILES_ACTIVE: default
       EUREKA_URL: http://eureka-server:8761/eureka/
-      MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-lgtm:4318/v1/traces
-      MANAGEMENT_OTLP_LOGGING_ENDPOINT: http://otel-lgtm:4318/v1/logs
-      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
     ports:
       - "8085:8080"   # REST
-      - "8086:8081"   # Management
     env_file:
       - .env
     depends_on:
@@ -199,7 +195,6 @@ services:
     depends_on:
       - event-management
       - user-service
-      - auth-service
 
   otel-lgtm:
     image: grafana/otel-lgtm:latest
