@@ -78,7 +78,9 @@ public class EventService {
 
 	@Retryable(
 			retryFor = FeignException.class,
-			backoff = @Backoff(delay = 500, multiplier = 2)
+			noRetryFor = {FeignException.NotFound.class},
+			backoff = @Backoff(delay = 500, multiplier = 2),
+			maxAttempts = 3
 	)
 	void ensureUserExists(Long id) {
         log.info("[Retry] Checking if user exists (id={})", id);
@@ -86,6 +88,10 @@ public class EventService {
 			userClient.getById(id);
 		} catch (FeignException.NotFound e) {
 			throw new IllegalArgumentException("User not found: " + id, e);
+		} catch (FeignException e) {
+			log.warn("FeignException occurred while checking user (id={}), status={}: {}", 
+					id, e.status(), e.getMessage());
+			throw e;
 		}
 	}
 
@@ -95,6 +101,7 @@ public class EventService {
 		if (ex.status() == 404) {
 			throw new IllegalArgumentException("User not found: " + id, ex);
 		}
+		log.error("User-service unavailable after retries (id={}), status={}", id, ex.status());
 		throw new IllegalStateException("User-service unavailable", ex);
 	}
 }

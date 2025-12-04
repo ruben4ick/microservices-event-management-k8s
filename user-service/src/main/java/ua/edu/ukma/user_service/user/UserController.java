@@ -21,6 +21,15 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        if (ex.getMessage() != null && ex.getMessage().contains("User not found")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @GetMapping
     public List<UserDto> getAll() {
         return userService.getAll();
