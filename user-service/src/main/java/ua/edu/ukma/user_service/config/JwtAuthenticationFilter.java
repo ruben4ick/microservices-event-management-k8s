@@ -45,8 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String username = extractUsername(token);
             
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (validateToken(token)) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && Boolean.TRUE.equals(validateToken(token))) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             username,
                             null,
@@ -55,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-            }
+
         } catch (Exception e) {
             logger.error("JWT validation failed", e);
         }
